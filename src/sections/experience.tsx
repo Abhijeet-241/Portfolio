@@ -1,6 +1,9 @@
+"use client";
+
 import { SectionLabel } from "@/components/section-label";
 import { Reveal } from "@/components/reveal";
 import { experience } from "@/constants/data";
+import type { ExperienceItem } from "@/types";
 
 export function Experience() {
   return (
@@ -10,54 +13,74 @@ export function Experience() {
           <SectionLabel>Experience</SectionLabel>
         </Reveal>
 
-        <div className="mt-4">
+        <div className="mt-10 space-y-6">
           {experience.map((job) => (
             <Reveal key={job.company}>
-              <article className="grid gap-x-10 gap-y-6 border-t border-border py-10 md:grid-cols-[230px_1fr]">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-base font-semibold tracking-tightish">{job.company}</h3>
-                    {job.current && (
-                      <span className="inline-flex h-1.5 w-1.5 rounded-full bg-accent" aria-label="Current role" />
-                    )}
-                  </div>
-                  <p className="mt-0.5 text-sm text-muted">{job.role}</p>
-                  <p className="mt-3 font-mono text-xs uppercase tracking-[0.14em] text-subtle">{job.period}</p>
-                  <p className="font-mono text-xs uppercase tracking-[0.14em] text-subtle">{job.location}</p>
-                  <ul className="mt-4 flex flex-wrap gap-1.5">
-                    {job.stack.map((s) => (
-                      <li
-                        key={s}
-                        className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[11px] text-muted"
-                      >
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="space-y-6">
-                  <Field label="The problem">{job.problem}</Field>
-                  <Field label="What I owned">{job.responsibility}</Field>
-                  <Field label="What I did">{job.solution}</Field>
-                  <div>
-                    <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.16em] text-subtle">Outcome</p>
-                    <ul className="space-y-1.5">
-                      {job.outcomes.map((o) => (
-                        <li key={o} className="flex gap-2.5 text-sm leading-relaxed text-foreground/90">
-                          <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
-                          {o}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </article>
+              <ExperienceCard job={job} />
             </Reveal>
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function ExperienceCard({ job }: { job: ExperienceItem }) {
+  function onMove(e: React.MouseEvent<HTMLElement>) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  }
+
+  return (
+    <article
+      onMouseMove={onMove}
+      className="spotlight-card group grid gap-x-10 gap-y-6 rounded-2xl border border-border bg-card/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-foreground/15 hover:shadow-xl hover:shadow-black/5 sm:p-9 md:grid-cols-[230px_1fr]"
+    >
+      <div>
+        <div className="flex items-center gap-2">
+          <h3 className="text-base font-semibold tracking-tightish transition-colors group-hover:text-accent">
+            {job.company}
+          </h3>
+          {job.current && (
+            <span className="relative flex h-2 w-2" aria-label="Current role">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+            </span>
+          )}
+        </div>
+        <p className="mt-0.5 text-sm text-muted">{job.role}</p>
+        <p className="mt-3 font-mono text-xs uppercase tracking-[0.14em] text-subtle">{job.period}</p>
+        <p className="font-mono text-xs uppercase tracking-[0.14em] text-subtle">{job.location}</p>
+        <ul className="mt-4 flex flex-wrap gap-1.5">
+          {job.stack.map((s) => (
+            <li
+              key={s}
+              className="rounded-full border border-border px-2.5 py-0.5 font-mono text-[11px] text-muted transition-colors hover:border-accent/50 hover:text-foreground"
+            >
+              {s}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="space-y-6">
+        <Field label="The problem">{job.problem}</Field>
+        <Field label="What I owned">{job.responsibility}</Field>
+        <Field label="What I did">{job.solution}</Field>
+        <div>
+          <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.16em] text-subtle">Outcome</p>
+          <ul className="space-y-1.5">
+            {job.outcomes.map((o) => (
+              <li key={o} className="flex gap-2.5 text-sm leading-relaxed text-foreground/90">
+                <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                {o}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </article>
   );
 }
 

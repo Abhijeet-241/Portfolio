@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 99%;
+  --foreground: 240 6% 10%;
+  --muted: 240 4% 44%;
+  --subtle: 240 5% 65%;
+  --border: 240 6% 90%;
+  --card: 0 0% 100%;
+  --accent: 162 74% 26%;
+  --accent-2: 199 89% 42%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 162 74% 30%;
+}
+
+.dark {
+  --background: 240 7% 5%;
+  --foreground: 0 0% 95%;
+  --muted: 240 5% 58%;
+  --subtle: 240 4% 40%;
+  --border: 240 5% 15%;
+  --card: 240 6% 8%;
+  --accent: 159 62% 46%;
+  --accent-2: 199 89% 56%;
+  --accent-foreground: 240 7% 5%;
+  --ring: 159 62% 46%;
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-feature-settings: "ss01", "cv01", "cv03";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: hsl(var(--accent) / 0.2);
+    color: hsl(var(--foreground));
+  }
+
+  :focus-visible {
+    outline: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Hairline grid texture used sparingly behind the hero. */
+.grid-fade {
+  background-image:
+    linear-gradient(to right, hsl(var(--border) / 0.6) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--border) / 0.6) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 10%, transparent 70%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 10%, transparent 70%);
+}
+
+/* Soft ambient color blobs behind the hero. */
+.aurora {
+  background:
+    radial-gradient(40% 50% at 20% 10%, hsl(var(--accent) / 0.18), transparent 70%),
+    radial-gradient(35% 45% at 85% 0%, hsl(var(--accent-2) / 0.16), transparent 70%);
+  filter: blur(2px);
+}
+
+/* Gradient text for accent words. */
+.text-gradient {
+  background-image: linear-gradient(110deg, hsl(var(--accent)), hsl(var(--accent-2)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Conic gradient ring used to frame the portrait. */
+.ring-conic {
+  background: conic-gradient(
+    from 180deg,
+    hsl(var(--accent) / 0.7),
+    hsl(var(--accent-2) / 0.5),
+    hsl(var(--accent) / 0.2),
+    hsl(var(--accent) / 0.7)
+  );
+}
+
+/* Edge-to-edge marquee, paused on hover. */
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.marquee-group:hover .marquee {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Animated sheen that sweeps across a card on hover. */
+.sheen {
+  position: relative;
+  overflow: hidden;
+}
+.sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    hsl(var(--foreground) / 0.06) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.sheen:hover::after {
+  transform: translateX(120%);
+}
+
+/* Spotlight that follows the cursor inside a card (set via --mx / --my). */
+.spotlight-card {
+  position: relative;
+}
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    340px circle at var(--mx, 50%) var(--my, 50%),
+    hsl(var(--accent) / 0.1),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float-y 6s ease-in-out infinite;
+}

@@ -1,8 +1,8 @@
 export const site = {
   name: "Abhijeet Pal",
   role: "Software Engineer",
-  // Update this to your deployed domain before going live.
-  url: "https://abhijeetpal.vercel.app",
+  // Live production domain on Vercel.
+  url: "https://portfolio-chi-sandy-27.vercel.app",
   description:
     "Software engineer building reliable financial products and AI systems that show their work. Mobile, fintech, and applied AI — currently at Paytm Money.",
   location: "Ghaziabad, India",
